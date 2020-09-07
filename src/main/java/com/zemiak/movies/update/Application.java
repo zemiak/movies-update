@@ -1,4 +1,4 @@
-package com.zemiak;
+package com.zemiak.movies.update;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
