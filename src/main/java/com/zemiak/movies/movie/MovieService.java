@@ -1,4 +1,4 @@
-package com.zemiak.movies.update.infuse.movie;
+package com.zemiak.movies.movie;
 
 import java.net.MalformedURLException;
 import java.net.URL;
