@@ -3,6 +3,7 @@ package com.zemiak.movies;
 import javax.inject.Inject;
 
 import com.zemiak.movies.infuse.InfuseService;
+import com.zemiak.movies.movie.NewMoviesCreator;
 
 import io.quarkus.runtime.Quarkus;
 import io.quarkus.runtime.QuarkusApplication;
@@ -11,11 +12,15 @@ import io.quarkus.runtime.annotations.QuarkusMain;
 @QuarkusMain
 public class Application implements QuarkusApplication {
     @Inject
-    InfuseService service;
+    InfuseService infuse;
+
+    @Inject
+    NewMoviesCreator creator;
 
     @Override
     public int run(String... args) throws Exception {
-        service.process();
+        creator.process();
+        infuse.process();
         return 0;
     }
 

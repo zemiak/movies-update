@@ -17,16 +17,18 @@ import com.zemiak.movies.movie.Movie;
 import com.zemiak.movies.movie.MovieService;
 import com.zemiak.movies.serie.Serie;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 @Dependent
 public class InfuseMovieWriter {
     private static final Logger LOG = Logger.getLogger(InfuseMovieWriter.class.getName());
-    private final String path = ConfigurationProvider.getPath();
+
+    @Inject
+    @ConfigProperty(name = "media.path")
+    String path;
 
     @Inject
     MovieService service;
-
-    @Inject
-    RefreshStatistics stats;
 
     @Inject
     InfuseCoversAndLinks metadataFiles;
@@ -48,7 +50,7 @@ public class InfuseMovieWriter {
         try {
             makeMovieLink(movie);
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Cannot make movie link for " + movie.fileName + ": " + ex.getMessage(), null);
+            LOG.log(Level.SEVERE, "Cannot make movie link for " + movie.fileName + ": " + ex.getMessage());
         }
     }
 

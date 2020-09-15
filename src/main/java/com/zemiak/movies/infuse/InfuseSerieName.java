@@ -3,14 +3,19 @@ package com.zemiak.movies.infuse;
 import java.util.Objects;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 import com.zemiak.movies.movie.Movie;
+import com.zemiak.movies.serie.SerieService;
 import com.zemiak.movies.strings.Encodings;
 
 @Dependent
 public class InfuseSerieName {
     static final Long GOT = 1000l;
     static final Long MASH = 1l;
+
+    @Inject
+    SerieService series;
 
     public String process(Movie movie) {
         String name;
@@ -26,7 +31,7 @@ public class InfuseSerieName {
     }
 
     private String process(Movie movie, Integer decimals, Integer season) {
-        String serie = Encodings.deAccent(movie.getSerieName());
+        String serie = Encodings.deAccent(series.getSerieName(movie.serieId));
         String seasonNumber = String.format("%02d", season);
         String format = "%0" + String.valueOf(decimals) + "d";
         Integer number = null == movie.displayOrder ? 0 : movie.displayOrder;

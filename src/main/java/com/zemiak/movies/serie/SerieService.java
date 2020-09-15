@@ -56,4 +56,8 @@ public class SerieService {
             pageIndex++;
         }
     }
+
+	public String getSerieName(Long serieId) {
+		return null;
+	}
 }

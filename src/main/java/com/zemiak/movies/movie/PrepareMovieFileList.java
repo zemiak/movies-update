@@ -1,4 +1,4 @@
-package com.zemiak.movies.infuse;
+package com.zemiak.movies.movie;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -8,12 +8,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Dependent
+@ApplicationScoped
 public class PrepareMovieFileList {
     @Inject
     @ConfigProperty(name = "media.path")

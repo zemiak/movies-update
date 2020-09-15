@@ -1,5 +1,6 @@
 package com.zemiak.movies.movie;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -46,6 +47,14 @@ public class MovieService {
         return Long.valueOf(client.count().getInt("count"));
     }
 
+    public List<String> filterNewMovies(List<String> fileNames) {
+        return client.findNewMovies(fileNames);
+    }
+
+    public Movie createFilename(String fileName) {
+        return client.createFilename(fileName);
+    }
+
     public void traverse(Consumer<Movie> action) {
         long count = count();
         int pageSize = 10;
@@ -55,5 +64,9 @@ public class MovieService {
             all(pageIndex, pageSize).stream().map(e -> (Movie) e).forEach(action);
             pageIndex++;
         }
+    }
+
+    public static String removeFileSeparatorFromStartIfNeeded(String relative) {
+        return !relative.startsWith(File.separator) ? relative : relative.substring(1);
     }
 }

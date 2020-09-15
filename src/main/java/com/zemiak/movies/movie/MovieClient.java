@@ -5,6 +5,7 @@ import java.util.List;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -27,4 +28,13 @@ public interface MovieClient {
     @GET
     @Path("count")
     JsonObject count();
+
+    @POST
+    @Path("filternew")
+    List<String> findNewMovies(List<String> fileNames);
+
+    @POST
+    @Path("filename")
+    @Consumes(MediaType.TEXT_PLAIN)
+    Movie createFilename(String fileName);
 }
