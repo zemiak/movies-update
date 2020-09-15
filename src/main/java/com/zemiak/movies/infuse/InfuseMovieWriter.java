@@ -7,13 +7,11 @@ import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.zemiak.movies.batch.RefreshStatistics;
-import com.zemiak.movies.batch.logs.BatchLogger;
-import com.zemiak.movies.config.ConfigurationProvider;
 import com.zemiak.movies.genre.Genre;
 import com.zemiak.movies.movie.Movie;
 import com.zemiak.movies.movie.MovieService;
@@ -21,7 +19,7 @@ import com.zemiak.movies.serie.Serie;
 
 @Dependent
 public class InfuseMovieWriter {
-    private static final BatchLogger LOG = BatchLogger.getLogger(InfuseMovieWriter.class.getName());
+    private static final Logger LOG = Logger.getLogger(InfuseMovieWriter.class.getName());
     private final String path = ConfigurationProvider.getPath();
 
     @Inject

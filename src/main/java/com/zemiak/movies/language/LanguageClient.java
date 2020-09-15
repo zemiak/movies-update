@@ -1,4 +1,4 @@
-package com.zemiak.languages.language;
+package com.zemiak.movies.language;
 
 import java.util.List;
 

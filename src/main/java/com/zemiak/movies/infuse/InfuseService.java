@@ -3,8 +3,6 @@ package com.zemiak.movies.infuse;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.zemiak.movies.batch.PrepareMovieFileList;
-
 @Dependent
 public class InfuseService {
     @Inject

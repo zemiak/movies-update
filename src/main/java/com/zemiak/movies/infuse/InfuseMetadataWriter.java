@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
+import com.zemiak.movies.genre.GenreService;
 import com.zemiak.movies.movie.Movie;
 
 @Dependent
@@ -26,6 +28,9 @@ public class InfuseMetadataWriter {
             + "<producers></producers>\n"
             + "<directors></directors>\n"
             + "</media>\n";
+
+    @Inject
+    GenreService genres;
 
     public void createMetadataFile(Movie movie, String movieName, Path linkName) throws IOException {
         String linkAbsoluteName = linkName.toString();
@@ -49,7 +54,7 @@ public class InfuseMetadataWriter {
                 .replace("{{title}}", movieName)
                 .replace("{{description}}", description)
                 .replace("{{published}}", published)
-                .replace("{{genre}}", movie.getGenreName());
+                .replace("{{genre}}", genres.getGenreName(movie.genreId));
     }
 
 

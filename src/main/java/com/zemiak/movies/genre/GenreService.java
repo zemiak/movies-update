@@ -56,4 +56,8 @@ public class GenreService {
             pageIndex++;
         }
     }
+
+	public CharSequence getGenreName(Long genreId) {
+		return null;
+	}
 }

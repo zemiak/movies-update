@@ -10,21 +10,28 @@ import java.util.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.zemiak.movies.config.ConfigurationProvider;
 import com.zemiak.movies.movie.Movie;
 import com.zemiak.movies.movie.MovieService;
 import com.zemiak.movies.serie.Serie;
 import com.zemiak.movies.strings.Encodings;
 
-import io.quarkus.panache.common.Sort;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Dependent
 public class InfuseCoversAndLinks {
     private static final Logger LOG = Logger.getLogger(InfuseCoversAndLinks.class.getName());
 
-    private final String infuseLinkPath = ConfigurationProvider.getInfuseLinkPath();
-    private final String path = ConfigurationProvider.getPath();
-    private final String imgPath = ConfigurationProvider.getImgPath();
+    @Inject
+    @ConfigProperty(name = "infuse.path")
+    String infuseLinkPath;
+
+    @Inject
+    @ConfigProperty(name = "media.path")
+    String path;
+
+    @Inject
+    @ConfigProperty(name = "image.path")
+    String imgPath;
 
     @Inject
     MovieService service;
@@ -36,7 +43,7 @@ public class InfuseCoversAndLinks {
     InfuseMetadataWriter metadata;
 
     public void createGenreAndSerieCovers() {
-        Movie.traverse(Sort.ascending("id"), movie -> {
+        service.traverse(movie -> {
             if (null != movie.genreId) {
                 createGenreCover(movie);
             }
