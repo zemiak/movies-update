@@ -13,8 +13,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import com.zemiak.movies.genre.Genre;
-import com.zemiak.movies.movie.Movie;
+import com.zemiak.movies.movie.MovieUI;
 import com.zemiak.movies.movie.MovieService;
+import com.zemiak.movies.movie.PrepareMovieFileList;
 import com.zemiak.movies.serie.Serie;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -33,12 +34,21 @@ public class InfuseMovieWriter {
     @Inject
     InfuseCoversAndLinks metadataFiles;
 
-    public void process(final List<String> list) {
-        list.stream()
-                .map(fileName -> Paths.get(fileName).toFile().getAbsolutePath())
-                .map(fileName -> service.findByFilename(fileName.substring(path.length())))
-                .filter(movie -> null != movie)
-                .forEach(this::makeMovieLinkNoException);
+    @Inject
+    PrepareMovieFileList movieList;
+
+    public void process() {
+        List<String> files = movieList.getFiles();
+        int pageSize = 50;
+        int pageCount = files.size() / pageSize;
+
+        for (int i = 0 ; i < pageCount ; i++) {
+            processPage(files.subList(i*pageSize, (i+1)*pageSize));
+        }
+
+        if (files.size() % pageSize != 0) {
+            processPage(files.subList(pageCount*pageSize, files.size()));
+        }
 
         makeRecentlyAdded();
         makeNewReleases();
@@ -46,7 +56,11 @@ public class InfuseMovieWriter {
         metadataFiles.createGenreAndSerieCovers();
     }
 
-    private void makeMovieLinkNoException(Movie movie) {
+    private void processPage(List<String> files) {
+        service.getMovieData(files).forEach(this::makeMovieLinkNoException);
+    }
+
+    private void makeMovieLinkNoException(MovieUI movie) {
         try {
             makeMovieLink(movie);
         } catch (IOException ex) {
@@ -54,8 +68,8 @@ public class InfuseMovieWriter {
         }
     }
 
-    private void makeMovieLink(Movie movie) throws IOException {
-        if (null == movie.genreId) {
+    private void makeMovieLink(MovieUI movie) throws IOException {
+        if (null == movie.genre) {
             LOG.log(Level.SEVERE, "Movie {0} has no genre", movie.fileName);
             return;
         }
@@ -77,24 +91,23 @@ public class InfuseMovieWriter {
     }
 
     private void makeRecentlyAdded() {
-        service.getRecentlyAdded().stream().forEach(movie -> {
-            movie.genreId = Genre.ID_RECENTLY_ADDED;
-            movie.serieId = Serie.ID_NONE;
+        service.getRecentlyAddedMovies().stream().forEach(movie -> {
+            movie.genre = Genre.getRecentlyAddedGenre().name;
+            movie.serie = "None";
             makeMovieLinkNoException(movie);
         });
     }
 
     private void makeNewReleases() {
-        int year = LocalDateTime.now().get(ChronoField.YEAR);
-        service.getNewReleases(year).stream().forEach(movie -> {
-            movie.genreId = Genre.ID_FRESH;
-            movie.serieId = Serie.ID_NONE;
+        service.getNewReleases().stream().forEach(movie -> {
+            movie.genre = Genre.getFreshGenre().name;
+            movie.serie = "None";
             makeMovieLinkNoException(movie);
         });
     }
 
-    private String getNumberPrefix(Movie movie) {
-        if ((null == movie.serieId || 0 == movie.serieId) && Objects.nonNull(movie.year) && movie.year > 1800) {
+    private String getNumberPrefix(MovieUI movie) {
+        if ((null == movie.serie || movie.serie.isBlank()) && Objects.nonNull(movie.year) && movie.year > 1800) {
             return String.format("%03d", (2500 - movie.year)) + "-";
         }
 

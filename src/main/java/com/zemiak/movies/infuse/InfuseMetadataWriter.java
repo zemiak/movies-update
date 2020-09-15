@@ -10,10 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 
-import com.zemiak.movies.genre.GenreService;
-import com.zemiak.movies.movie.Movie;
+import com.zemiak.movies.movie.MovieUI;
 
 @Dependent
 public class InfuseMetadataWriter {
@@ -29,10 +27,7 @@ public class InfuseMetadataWriter {
             + "<directors></directors>\n"
             + "</media>\n";
 
-    @Inject
-    GenreService genres;
-
-    public void createMetadataFile(Movie movie, String movieName, Path linkName) throws IOException {
+    public void createMetadataFile(MovieUI movie, String movieName, Path linkName) throws IOException {
         String linkAbsoluteName = linkName.toString();
         int pos = linkAbsoluteName.lastIndexOf("/");
         String fileNameWithExt = linkAbsoluteName.substring(pos + 1);
@@ -46,7 +41,7 @@ public class InfuseMetadataWriter {
         Files.write(metadataFile, lines, Charset.forName("UTF-8"), StandardOpenOption.CREATE_NEW);
     }
 
-    private String getMetadataString(Movie movie, String movieName) {
+    private String getMetadataString(MovieUI movie, String movieName) {
         String published = null == movie.year ? "" : movie.year + "-01-01";
         String description = null == movie.description ? "" : movie.description;
 
@@ -54,7 +49,7 @@ public class InfuseMetadataWriter {
                 .replace("{{title}}", movieName)
                 .replace("{{description}}", description)
                 .replace("{{published}}", published)
-                .replace("{{genre}}", genres.getGenreName(movie.genreId));
+                .replace("{{genre}}", movie.genre);
     }
 
 

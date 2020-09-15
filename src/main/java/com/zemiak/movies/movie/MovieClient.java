@@ -18,8 +18,8 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @Consumes(MediaType.APPLICATION_JSON)
 public interface MovieClient {
     @GET
-    @Path("paged")
-    List<Movie> all(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize);
+    @Path("ui/paged")
+    List<MovieUI> all(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize);
 
     @GET
     @Path("{id}")
@@ -34,7 +34,19 @@ public interface MovieClient {
     List<String> findNewMovies(List<String> fileNames);
 
     @POST
+    @Path("fetch")
+    List<MovieUI> getMovieData(List<String> fileNames);
+
+    @POST
     @Path("filename")
     @Consumes(MediaType.TEXT_PLAIN)
     Movie createFilename(String fileName);
+
+    @GET
+    @Path("ui/recent")
+    List<MovieUI> getRecentlyAddedMovies();
+
+    @GET
+    @Path("ui/new")
+    List<MovieUI> getNewReleases();
 }

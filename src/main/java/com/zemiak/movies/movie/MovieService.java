@@ -35,7 +35,7 @@ public class MovieService {
             .build(MovieClient.class);
     }
 
-    public List<Movie> all(int page, int pageSize) {
+    public List<MovieUI> all(int page, int pageSize) {
         return client.all(page, pageSize);
     }
 
@@ -55,18 +55,30 @@ public class MovieService {
         return client.createFilename(fileName);
     }
 
-    public void traverse(Consumer<Movie> action) {
+    public void traverse(Consumer<MovieUI> action) {
         long count = count();
         int pageSize = 10;
         long pageCount = count / pageSize + (count % pageSize > 0 ? 1 : 0);
         int pageIndex = 0;
         while (pageIndex < pageCount) {
-            all(pageIndex, pageSize).stream().map(e -> (Movie) e).forEach(action);
+            all(pageIndex, pageSize).stream().map(e -> (MovieUI) e).forEach(action);
             pageIndex++;
         }
     }
 
     public static String removeFileSeparatorFromStartIfNeeded(String relative) {
         return !relative.startsWith(File.separator) ? relative : relative.substring(1);
+    }
+
+    public List<MovieUI> getMovieData(List<String> fileNames) {
+        return client.getMovieData(fileNames);
+    }
+
+    public List<MovieUI> getRecentlyAddedMovies() {
+        return client.getRecentlyAddedMovies();
+    }
+
+    public List<MovieUI> getNewReleases() {
+        return client.getNewReleases();
     }
 }
