@@ -1,9 +1,6 @@
 package com.zemiak.movies.infuse;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -13,10 +10,9 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
 import com.zemiak.movies.genre.Genre;
-import com.zemiak.movies.movie.MovieUI;
 import com.zemiak.movies.movie.MovieService;
+import com.zemiak.movies.movie.MovieUI;
 import com.zemiak.movies.movie.PrepareMovieFileList;
-import com.zemiak.movies.serie.Serie;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
