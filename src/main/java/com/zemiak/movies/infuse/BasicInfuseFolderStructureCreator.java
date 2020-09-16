@@ -25,6 +25,15 @@ public class BasicInfuseFolderStructureCreator {
 
     public void cleanAndCreate() {
         Path directory = Paths.get(infuseLinkPath);
+
+        if (! directory.toFile().exists()) {
+            try {
+                Files.createDirectories(directory);
+            } catch (IOException ex) {
+                LOG.log(Level.SEVERE, "Error creating Infuse folder " + infuseLinkPath, ex);
+            }
+        }
+
         try {
             Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
                 @Override
