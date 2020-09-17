@@ -30,10 +30,12 @@ public class NewMoviesCreator {
 
         for (int i = 0 ; i < pageCount ; i++) {
             processPage(files.subList(i*pageSize, (i+1)*pageSize));
+            System.out.println("... processed page " + i);
         }
 
         if (files.size() % pageSize != 0) {
             processPage(files.subList(pageCount*pageSize, files.size()));
+            System.out.println("... processed last page");
         }
     }
 
