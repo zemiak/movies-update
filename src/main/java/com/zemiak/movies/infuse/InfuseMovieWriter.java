@@ -46,6 +46,7 @@ public class InfuseMovieWriter {
             processPage(files.subList(pageCount*pageSize, files.size()));
         }
 
+        makeUnassigned();
         makeRecentlyAdded();
         makeNewReleases();
 
@@ -89,7 +90,7 @@ public class InfuseMovieWriter {
     private void makeRecentlyAdded() {
         service.getRecentlyAddedMovies().stream().forEach(movie -> {
             movie.genre = Genre.getRecentlyAddedGenre().name;
-            movie.serie = "None";
+            movie.serie = null;
             makeMovieLinkNoException(movie);
         });
     }
@@ -97,7 +98,15 @@ public class InfuseMovieWriter {
     private void makeNewReleases() {
         service.getNewReleases().stream().forEach(movie -> {
             movie.genre = Genre.getFreshGenre().name;
-            movie.serie = "None";
+            movie.serie = null;
+            makeMovieLinkNoException(movie);
+        });
+    }
+
+    private void makeUnassigned() {
+        service.getNewReleases().stream().forEach(movie -> {
+            movie.genre = Genre.getUnassignedGenre().name;
+            movie.serie = null;
             makeMovieLinkNoException(movie);
         });
     }

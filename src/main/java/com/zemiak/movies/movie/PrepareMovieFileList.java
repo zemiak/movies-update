@@ -19,12 +19,16 @@ public class PrepareMovieFileList {
     @ConfigProperty(name = "media.path")
     String path;
 
+    String pathWithSlash;
+
     private final List<String> files = new ArrayList<>();
     private static final Logger LOG = Logger.getLogger(PrepareMovieFileList.class.getName());
 
 
     @PostConstruct
     public void init() {
+        pathWithSlash = path.endsWith(File.pathSeparator) ? path : path + File.pathSeparator;
+
         File mainDir = new File(path);
         if (! mainDir.isDirectory()) {
             LOG.log(Level.SEVERE, "{0} is not a directory", path);
@@ -61,7 +65,7 @@ public class PrepareMovieFileList {
         String relative = getRelativeFileName(absolutePath);
 
         if (!relative.startsWith(".") && ("mp4".equals(ext) || "m4v".equals(ext))) {
-            files.add(absolutePath);
+            files.add(absolutePath.substring(pathWithSlash.length()));
         }
     }
 

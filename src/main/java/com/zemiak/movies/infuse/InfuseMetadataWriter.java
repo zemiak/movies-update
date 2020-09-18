@@ -49,7 +49,7 @@ public class InfuseMetadataWriter {
                 .replace("{{title}}", movieName)
                 .replace("{{description}}", description)
                 .replace("{{published}}", published)
-                .replace("{{genre}}", movie.genre);
+                .replace("{{genre}}", InfuseCoversAndLinks.getGenreName(movie));
     }
 
 

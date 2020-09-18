@@ -18,15 +18,15 @@ public class Genre {
     public static Genre getFreshGenre() {
         Genre g = new Genre();
         g.id = Genre.ID_FRESH;
-        g.name = "Fresh";
-        g.pictureFileName = "notdefined.png";
+        g.name = "x-Fresh";
+        g.pictureFileName = "fresh.png";
         return g;
     }
 
     public static Genre getUnassignedGenre() {
         Genre g = new Genre();
         g.id = Genre.ID_UNASSIGNED;
-        g.name = "Unassigned";
+        g.name = "x-None";
         g.pictureFileName = "notdefined.png";
         return g;
     }
@@ -34,8 +34,8 @@ public class Genre {
     public static Genre getRecentlyAddedGenre() {
         Genre g = new Genre();
         g.id = Genre.ID_RECENTLY_ADDED;
-        g.name = "New";
-        g.pictureFileName = "notdefined.png";
+        g.name = "x-New";
+        g.pictureFileName = "recentlyadded.png";
         return g;
     }
 
