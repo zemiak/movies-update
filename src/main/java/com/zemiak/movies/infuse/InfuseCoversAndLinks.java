@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import com.zemiak.movies.genre.Genre;
 import com.zemiak.movies.movie.MovieService;
 import com.zemiak.movies.movie.MovieUI;
+import com.zemiak.movies.serie.Serie;
 import com.zemiak.movies.strings.Encodings;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -109,6 +110,10 @@ public class InfuseCoversAndLinks {
     }
 
     private void createSerieCover(MovieUI movie) {
+        if (Serie.NOT_DEFINED.equalsIgnoreCase(movie.serie)) {
+            return;
+        }
+        
         Path link = Paths.get(infuseLinkPath,
                     Encodings.deAccent(getGenreName(movie)),
                     Encodings.deAccent(movie.serie),
@@ -172,7 +177,8 @@ public class InfuseCoversAndLinks {
                 Files.createSymbolicLink(link, existing);
                 LOG.log(Level.INFO, "Created link " + link.toString() + " --> " + existing.toString());
             } catch (IOException ex) {
-                LOG.log(Level.INFO, "Cannot create symbolic link for {0} as {1}", new Object[]{link.toString(), existing.toString()});
+                LOG.log(Level.INFO, "Cannot create symbolic link {0} <== {1} because {2}",
+                new Object[]{link.toString(), existing.toString(), ex.getMessage()});
             }
         }
     }

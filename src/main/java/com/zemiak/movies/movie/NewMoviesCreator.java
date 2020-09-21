@@ -44,7 +44,7 @@ public class NewMoviesCreator {
                 .map(this::getRelativeFilename)
                 .map(fileName -> service.createFilename(fileName))
                 .forEach(m -> {
-                    LOG.log(Level.INFO, "Created a new movie ''%s''/''%s'', id %d... \n",
+                    LOG.log(Level.INFO, "Created a new movie {0}/{1}, id {2}... \n",
                             new Object[]{m.fileName, m.name, m.id});
                 });
     }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Serie {
     public static final Long ID_NONE = 0l;
+    public static final String NOT_DEFINED = "Not defined";
 
     public Long id;
     public String name;
