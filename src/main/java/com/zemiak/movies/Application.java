@@ -1,30 +1,24 @@
 package com.zemiak.movies;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.zemiak.movies.infuse.InfuseService;
 import com.zemiak.movies.movie.NewMoviesCreator;
 
-import io.quarkus.runtime.Quarkus;
-import io.quarkus.runtime.QuarkusApplication;
-import io.quarkus.runtime.annotations.QuarkusMain;
+import io.quarkus.scheduler.Scheduled;
 
-@QuarkusMain
-public class Application implements QuarkusApplication {
+@ApplicationScoped
+public class Application {
     @Inject
     InfuseService infuse;
 
     @Inject
     NewMoviesCreator creator;
 
-    @Override
-    public int run(String... args) throws Exception {
+    @Scheduled(cron="0 15 3 * * ?") // 3:15am every day
+    public void run() {
         creator.process();
         infuse.process();
-        return 0;
-    }
-
-    public static void main(String[] args) {
-        Quarkus.run(Application.class, args);
     }
 }

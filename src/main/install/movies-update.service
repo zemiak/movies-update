@@ -1,0 +1,22 @@
+[Unit]
+Description=movies-update
+Requires=docker.service
+After=docker.service
+
+[Service]
+Environment=DOPTS="--restart=always"
+Environment=CONTAINERNAME=movies-update
+Environment=IMAGE=quay.io/zemiak/movies-update:latest
+Environment=QUARKUS_PROFILE=prod
+Environment=QUARKUS_HTTP_PORT=8081
+Environment=PORTMAP=8081:8081
+Environment=VOLUME=/volume1/movies/Movies:/data
+Environment=MEMORY=256m
+ExecStartPre=-/usr/bin/docker rm -f ${CONTAINERNAME}
+ExecStart=/usr/bin/docker run $DOPTS -m ${MEMORY} --name ${CONTAINERNAME} -p ${PORTMAP} -e QUARKUS_PROFILE=${QUARKUS_PROFILE} -e QUARKUS_HTTP_PORT=${QUARKUS_HTTP_PORT} -v ${VOLUME} ${IMAGE}
+ExecStop=/usr/bin/docker stop -t 10 ${CONTAINERNAME}
+ExecStopPost=/usr/bin/docker rm -f ${CONTAINERNAME}
+ExecReload=/usr/bin/docker exec -t ${CONTAINERNAME} kill -HUP 1
+
+[Install]
+WantedBy=default.target

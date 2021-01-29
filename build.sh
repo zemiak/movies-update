@@ -1,10 +1,3 @@
 #!/bin/sh
 
-cd ./src/main/docker || exit 10
-docker build . -f Dockerfile -t movies-moviethumbnails
-if [ $? -ne 0 ]
-then
-    exit 15
-fi
-
-cd ../../.. || exit 17
+mvn package -q && docker build . -t movies-update:latest -f ./src/main/docker/Dockerfile.fast-jar -q
